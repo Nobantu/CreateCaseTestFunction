@@ -98,7 +98,13 @@ namespace TestFunction2
                 {
                     if (Regex.IsMatch(creatorID, @"^[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]-[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]-[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]-[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]-[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]+[A-Za-z0-9]$") == true)
                     {
-
+                        if (opID == clientID || opID == creatorID || clientID == creatorID)
+                        {
+                            return (ActionResult)new OkObjectResult(new
+                            {
+                                ErrorMessage = "Please input the creatorID in the format 00000000-0000-0000-0000-000000000000"
+                            });
+                        }
                         return (ActionResult)new OkObjectResult(new
                         {   
                             operationID = opID,
@@ -138,6 +144,15 @@ namespace TestFunction2
             
             return new OkResult();
         }
+    }
+    public class Customer
+    {
+        public string Firstname { get; set; }
+        public string Surname { get; set; }
+        public int ContactNumber { get; set; }
+        public int IDNumber { get; set; }
+        public int IdentificationType { get; set; }
+        public bool IsPolicyHolder { get; set; }
     }
 }
 
