@@ -33,47 +33,6 @@ namespace TestFunction2
             _logger = log;
         }
 
-        //[FunctionName("case1")]
-        ////Cant update anything from here as this would make the application to require a restart
-        ////this portion is what appears when we load the api urlh
-        //[OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
-        //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        //[OpenApiParameter(name: "name", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **Name** parameter")]
-        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
-        //public async Task<IActionResult> Run(
-        //    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
-        //{
-        //    CaseDetails caseInfo;
-        //    caseInfo = await new StreamReader(req.Body).ReadToEndAsync();
-        //    if (caseInfo.firstName == null)
-        //    {
-        //        return new BadRequestObjectResult("Please enter name");
-        //    }
-        //    if (caseInfo.surname == null)
-        //    {
-        //        return new BadRequestObjectResult("Please enter surname");
-        //    }
-        //    if (caseInfo.contactNumber.ToString() == null)
-        //    {
-        //        return new BadRequestObjectResult("Please enter contact number");
-        //    }
-        //    return (ActionResult)new OkObjectResult(new
-        //    {
-        //        //message = case1
-        //    });
-
-
-        //    string name = req.Query["name"];
-
-        //    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        //    dynamic data = JsonConvert.DeserializeObject(requestBody);
-        //    name = name ?? data?.name;
-
-        //    string responseMessage = string.IsNullOrEmpty(name)
-        //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-        //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
-        //}
-
         [FunctionName("CreateCase")]
         //Cant update anything from here as this would make the application to require a restart
         //this portion is what appears when we load the api urlh
@@ -82,6 +41,8 @@ namespace TestFunction2
         [OpenApiParameter(name: "OperationNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **operationNodeId** parameter")]
         [OpenApiParameter(name: "ClientNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **clientNodeId** parameter")]
         [OpenApiParameter(name: "CreatorNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **creatorNodeId** parameter")]
+        [OpenApiRequestBody(contentType: "application/json",bodyType: typeof(Customer),Description ="Parameters",Required =true)]
+        [OpenApiResponseBody()]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function , "post", Route = null)] HttpRequest req)
@@ -102,7 +63,7 @@ namespace TestFunction2
                         {
                             return (ActionResult)new OkObjectResult(new
                             {
-                                ErrorMessage = "Please input the creatorID in the format 00000000-0000-0000-0000-000000000000"
+                                ErrorMessage = "Parameters can not be the same value!!"
                             });
                         }
                         return (ActionResult)new OkObjectResult(new
@@ -141,8 +102,6 @@ namespace TestFunction2
                 { 
                    ErrorMessage = "Please input the OperationNodeId in the format 00000000-0000-0000-0000-000000000000"
                 });
-            
-            return new OkResult();
         }
     }
     public class Customer
@@ -153,6 +112,32 @@ namespace TestFunction2
         public int IDNumber { get; set; }
         public int IdentificationType { get; set; }
         public bool IsPolicyHolder { get; set; }
+    }
+    public class vehicle
+    {
+        public string LicensePlateNumber { get; set; }
+        public string make { get; set; }
+        public string Model { get; set; }
+        public string MnCode { get; set; }
+        public DateOnly Year { get; set; }
+        public string Vin { get; set; }
+        public int VehicleCode { get; set; }
+        public int WriteOffIndicator { get; set; }
+        public int VehicleType { get; set; }
+    }
+    public class Account
+    {
+        public string CompanyName { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public string IDNumber { get; set; }
+        public int IdentificationType { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string ContactNumber { get; set; }
+        public char ClientId { get; set; }
+        public string PolicyNumber { get; set; }
+        public string PolicyVehicleExternalSystemId { get; set; }
+        public string PolicyDriverExternalSystemId { get; set; }
     }
 }
 
