@@ -1,0 +1,11 @@
+Operations NOde ID = 'e86d26af-f717-462e-96c3-1d37332d11b4'
+Integration ID = 596FDD49-D4ED-4C0D-9780-3E8901425524
+
+{
+"ClientId": "596FDD49-D4ED-4C0D-9780-3E8901425524",
+"EmailAddress": "string",
+"UniqueReferenceNumber": "DTTST01",
+"FirstName": "string",
+"Surname": "string",
+"OperationsNodeId": "e86d26af-f717-462e-96c3-1d37332d11b4"
+}

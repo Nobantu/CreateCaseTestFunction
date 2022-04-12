@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFunction2", "TestFunction2\TestFunction2.csproj", "{E4E65228-3D02-40EF-8B10-2B63203F3743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFunction2", "TestFunction2\TestFunction2.csproj", "{E4E65228-3D02-40EF-8B10-2B63203F3743}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{EC50AE8E-42A8-4367-851E-014A57C2BC0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

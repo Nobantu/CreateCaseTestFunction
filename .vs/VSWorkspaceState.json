@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\TestFunction2",
+    "\\TestFunction2\\docs",
     "\\TestFunction2\\TestFunction2"
   ],
-  "SelectedNode": "\\TestFunction2\\TestFunction2\\case1.cs",
+  "SelectedNode": "\\TestFunction2\\docs",
   "PreviewInSolutionExplorer": false
 }
