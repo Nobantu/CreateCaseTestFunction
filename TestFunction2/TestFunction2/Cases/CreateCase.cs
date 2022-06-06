@@ -1,4 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,42 +14,40 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using TestFunction2.Cases.Models;
 
 namespace TestFunction2;
 
-public sealed class CreateCase
+public class CreateCase
 {
     private readonly ILogger<CreateCase> _logger;
-
     public CreateCase(ILogger<CreateCase> logger)
     {
         _logger = logger;
     }
-
     [FunctionName("CreateCase")]
-    [OpenApiOperation(operationId: "Run", tags: new[] { "Case"})]
-    [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-    //[OpenApiParameter(name: "OperationNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **operationNodeId** parameter")]
-    //[OpenApiParameter(name: "ClientNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **clientNodeId** parameter")]
-    //[OpenApiParameter(name: "CreatorNodeId", In = ParameterLocation.Query, Required = true, Type = typeof(char), Description = "The **creatorNodeId** parameter")]
-    //[OpenApiRequestBody(contentType: "application/json",bodyType: typeof(Customer),Description ="Customer Details",Required =true)]
-    //[OpenApiRequestBody(contentType: "", bodyType: typeof(Vehicle), Description = "Vehicle Details", Required = true)]
-
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "The OK response")]
-
+    [OpenApiOperation(operationId: "Run", tags: new[] { "Case" })]
+    [OpenApiSecurity("Bearer_auth", SecuritySchemeType.ApiKey, Scheme = OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT", Name = "Token", In = OpenApiSecurityLocationType.Header)]
+    [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ExternalElements) , Description = "Add case details", Required = true)]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function , "post", Route = null)] HttpRequest req)
     {
-        //    string opID = req.Query["OperationNodeId"];
-        //    string clientID = req.Query["ClientNodeId"];
-        //    string creatorID = req.Query["CreatorNodeID"];
-        //    string errorMessage = req.Query["Error"];
+        _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-        //string customerDetails = await new StreamReader(req.Body).ReadToEndAsync();
+        var token = req.Headers?["Token"];
+        var caseDetails = await new StreamReader(req.Body).ReadToEndAsync();
+        HttpResponseMessage response = new HttpResponseMessage();
 
-        //dynamic customer = JsonConvert.DeserializeObject(customerDetails);
-        // return (ActionResult)new OkObjectResult(new { customer = customer });
-        await Task.CompletedTask;
-        return new OkObjectResult("Create Case");
+        using (var client = new HttpClient())
+        {
+            var baseUrl = new Uri("https://yttriumstaging.dreamtec.co.za/api/Case/Create");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, baseUrl);
+            request.Content = new StringContent(caseDetails, Encoding.UTF8,"application/json");
+            //token = token.Value.ToString().Replace("Bearer", "");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            response = await client.SendAsync(request);
+            var results = await response.Content.ReadAsStringAsync();
+            return new OkObjectResult(results);
+        }
     }
 }

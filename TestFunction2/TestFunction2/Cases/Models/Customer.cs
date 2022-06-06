@@ -1,4 +1,5 @@
-﻿namespace TestFunction2.Cases.Models;
+﻿
+namespace TestFunction2.Cases.Models;
 
 public class Customer
 {
